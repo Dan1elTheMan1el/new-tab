@@ -1,0 +1,51 @@
+:root {
+  --text-color: white;
+  --primary-color: #282c34;
+  --secondary-color: rgb(54, 62, 77);
+}
+
+html, body {
+  background-color: var(--primary-color);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.App {
+  text-align: center;
+  background-color: var(--primary-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+}
+
+.App-header {
+  font-size: calc(10px + 6vmin);
+  font-weight: bold;
+}
+
+.name-input {
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: calc(10px + 6vmin);
+  font-weight: bold;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+.name-input:hover {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.name-input:focus {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.site-card {
+  max-width: 250;
+  min-width: 250;
+  color: 'white';
+  background-color:'rgb(54, 62, 77)';
+}
