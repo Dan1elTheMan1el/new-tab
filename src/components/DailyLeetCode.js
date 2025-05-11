@@ -170,7 +170,7 @@ const DailyLeetCode = ({ colors, username }) => {
             backgroundColor: colors.secondaryColor, 
             marginTop: '20px' 
         }}>
-            <CardActionArea href={questionLink} target="_blank" rel="noopener">
+            <CardActionArea href={questionLink} rel="noopener">
                 <CardContent sx={{ 
                     display: 'flex',
                     flexDirection: 'column',

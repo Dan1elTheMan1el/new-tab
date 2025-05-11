@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import CardGallery from './components/cardGallery';
 import { IconButton } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
+import EditIcon from '@mui/icons-material/Edit';
 import Menu from '@mui/material/Menu';
 import ColorSettings from './components/ColorSettings';
 import WidgetSettings from './components/WidgetSettings';
@@ -16,6 +17,9 @@ function App() {
     const savedName = localStorage.getItem('name');
     return savedName ? savedName : '(Your name)';
   });
+  
+  // Edit mode state
+  const [editMode, setEditMode] = useState(false);
   // Updating name in local storage
   useEffect(() => {
     localStorage.setItem('name', name);
@@ -72,6 +76,20 @@ function App() {
   const handleAddSite = (newSite) => {
     setSites([...sites, newSite]);
   };
+  
+  const handleDeleteSite = (index) => {
+    const newSites = [...sites];
+    newSites.splice(index, 1);
+    setSites(newSites);
+  };
+  
+  const handleMoveSite = (dragIndex, hoverIndex) => {
+    const dragSite = sites[dragIndex];
+    const newSites = [...sites];
+    newSites.splice(dragIndex, 1); // Remove dragged item
+    newSites.splice(hoverIndex, 0, dragSite); // Insert it at the new position
+    setSites(newSites);
+  };
 
   const [colors, setColors] = useState(() =>{
     const savedColors = localStorage.getItem('colors');
@@ -112,16 +130,30 @@ function App() {
 
   return (
     <div className="App">
-      <IconButton //Settings button
-        id='settings-button'
-        aria-controls={open ? 'settings-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        sx={{ position: 'absolute', top: 20, left: 20 }}
-      >
-        <SettingsIcon sx={{color:'var(--text-color)', fontSize:35}} />
-      </IconButton>
+      <div style={{ position: 'absolute', top: 20, left: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <IconButton //Settings button
+          id='settings-button'
+          aria-controls={open ? 'settings-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          <SettingsIcon sx={{color:'var(--text-color)', fontSize:35}} />
+        </IconButton>
+        
+        <IconButton //Edit mode toggle
+          onClick={() => setEditMode(!editMode)}
+          sx={{ 
+            marginTop: '8px',
+            backgroundColor: editMode ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+            '&:hover': {
+              backgroundColor: editMode ? 'var(--secondary-color)' : 'rgb(0,0,0,0,2)',
+            },
+          }}
+        >
+          <EditIcon sx={{color:'var(--text-color)', fontSize:28}} />
+        </IconButton>
+      </div>
       <Menu //Settings menu
         id='settings-menu'
         MenuListProps={{
@@ -145,7 +177,14 @@ function App() {
       </header>
 
       
-      <CardGallery sites={sites} colors={colors} onAddSite={() => setAddSiteModalOpen(true)} />
+      <CardGallery 
+    sites={sites}
+    colors={colors}
+    onAddSite={() => setAddSiteModalOpen(true)}
+    editMode={editMode}
+    onDeleteSite={handleDeleteSite}
+    onMoveSite={handleMoveSite}
+  />
       <DailyLeetCode colors={colors} username={leetCodeUsername}/>
       <OpenChat colors={colors} />
       
