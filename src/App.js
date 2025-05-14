@@ -9,6 +9,7 @@ import ColorSettings from './components/ColorSettings';
 import WidgetSettings from './components/WidgetSettings';
 import OpenChat from './components/OpenChat';
 import DailyLeetCode from './components/DailyLeetCode';
+import DesmosCalculator from './components/DesmosCalculator';
 import AddSiteModal from './components/AddSiteModal';
 
 function App() {
@@ -117,6 +118,39 @@ function App() {
     localStorage.setItem('leetCodeUsername', leetCodeUsername);
   }, [leetCodeUsername]);
 
+  // Calculator visibility state with localStorage persistence
+  const [showCalculator, setShowCalculator] = useState(() => {
+    const savedShowCalculator = localStorage.getItem('showCalculator');
+    return savedShowCalculator ? JSON.parse(savedShowCalculator) : true;
+  });
+
+  // Save calculator visibility to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('showCalculator', JSON.stringify(showCalculator));
+  }, [showCalculator]);
+
+  // LeetCode visibility state with localStorage persistence
+  const [showLeetCode, setShowLeetCode] = useState(() => {
+    const savedShowLeetCode = localStorage.getItem('showLeetCode');
+    return savedShowLeetCode ? JSON.parse(savedShowLeetCode) : true;
+  });
+
+  // Save LeetCode visibility to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('showLeetCode', JSON.stringify(showLeetCode));
+  }, [showLeetCode]);
+
+  // Chat visibility state with localStorage persistence
+  const [showChat, setShowChat] = useState(() => {
+    const savedShowChat = localStorage.getItem('showChat');
+    return savedShowChat ? JSON.parse(savedShowChat) : true;
+  });
+
+  // Save Chat visibility to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('showChat', JSON.stringify(showChat));
+  }, [showChat]);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -162,9 +196,24 @@ function App() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxWidth: '300px', 
+            width: '100%'
+          }
+        }}
       >
         <ColorSettings colors={colors} setColors={setColors} />
-        <WidgetSettings leetCodeUsername={leetCodeUsername} setLeetCodeUsername={setLeetCodeUsername} />
+        <WidgetSettings 
+          leetCodeUsername={leetCodeUsername} 
+          setLeetCodeUsername={setLeetCodeUsername}
+          showCalculator={showCalculator}
+          setShowCalculator={setShowCalculator}
+          showLeetCode={showLeetCode}
+          setShowLeetCode={setShowLeetCode}
+          showChat={showChat}
+          setShowChat={setShowChat}
+        />
       </Menu>
 
       <header className="App-header">
@@ -185,8 +234,42 @@ function App() {
     onDeleteSite={handleDeleteSite}
     onMoveSite={handleMoveSite}
   />
-      <DailyLeetCode colors={colors} username={leetCodeUsername}/>
-      <OpenChat colors={colors} />
+      
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        flexWrap: 'wrap'
+      }}>
+        {/* Left Column: LeetCode and OpenChat */}
+        <div style={{ 
+          flex: '1', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center',
+          minWidth: '300px',
+          maxWidth: '600px',
+          padding: '0 10px'
+        }}>
+          {showLeetCode && <DailyLeetCode colors={colors} username={leetCodeUsername}/>}
+          {showChat && <OpenChat colors={colors} />}
+        </div>
+        
+        {/* Right Column: Calculator */}
+        <div style={{ 
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          minWidth: '300px',
+          maxWidth: '600px',
+          padding: '0 10px'
+        }}>
+          {showCalculator && <DesmosCalculator colors={colors} />}
+        </div>
+      </div>
       
       <AddSiteModal
         open={addSiteModalOpen}

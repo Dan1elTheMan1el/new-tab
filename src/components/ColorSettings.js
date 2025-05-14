@@ -1,4 +1,6 @@
 import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 import { SketchPicker } from 'react-color';
 import { useState } from 'react';
 
@@ -47,7 +49,10 @@ function ColorSettings({colors, setColors}) {
 
     return(
         <div>
-            <h3 style={{margin:'4px',textAlign:'center',textDecoration:'underline'}}>Color Settings</h3>
+            <Typography variant="subtitle1" sx={{margin:'4px',textAlign:'center',fontWeight:'bold'}}>
+                Color Settings
+            </Typography>
+            <Divider sx={{ my: 0.5 }} />
             <MenuItem 
                 onClick={() => handleMenuItemClick('textColor')}
                 sx={{ 
@@ -55,7 +60,10 @@ function ColorSettings({colors, setColors}) {
                 color: getContrastingTextColor(colors.textColor),
                 '&:hover': {
                     backgroundColor: lightenColor(colors.textColor, 0.2)
-                }
+                },
+                py: 0.5,
+                minHeight: '32px',
+                fontSize: '0.9rem'
                 }}
             >
                 Edit Text Color
